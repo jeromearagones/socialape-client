@@ -9,14 +9,19 @@ import Button from '@material-ui/core/Button';
 import MuiLink from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 // Icons
 import LocationOn from '@material-ui/icons/LocationOn';
 import LinkIcon from '@material-ui/icons/Link';
 import CalendarToday from '@material-ui/icons/CalendarToday';
+import EditIcon from '@material-ui/icons/Edit';
 
 // Redux
 import { connect } from 'react-redux';
+//import { IconButton } from '@material-ui/core';
+import { logoutUser, uploadImage } from '../redux/actions/userActions';
 
 const styles = (theme) => ({
     paper: {
@@ -24,7 +29,7 @@ const styles = (theme) => ({
     },
     profile: {
       '& .image-wrapper': {
-        textAlign: 'center',
+        textAlign: 'center', 
         position: 'relative',
         '& button': {
           position: 'absolute',
@@ -67,6 +72,16 @@ const styles = (theme) => ({
 });
 
 class Profile extends Component {
+    handleImageChange = (event) => {
+      const image = event.target.files[0];
+      const formData = new FormData();
+      formData.append('image', image, image.name);
+      this.props.uploadImage(formData);
+    };
+    handleEditPicture = () => {
+      const fileInput = document.getElementById('imageInput');
+      fileInput.click();
+    }
     render() {
         const { classes, 
         user: { 
@@ -81,6 +96,12 @@ class Profile extends Component {
                 <div className={classes.profile}>
                     <div className="image-wrapper">
                         <img src={imageURL} alt="profile" className="profile-image" />
+                        <input type="file" id="imageInput" hidden="hidden" onChange={this.handleImageChange}/>
+                    <Tooltip title="Edit profile picture" placement="right">
+                    <IconButton onClick={this.handleEditPicture} className="button">
+                      <EditIcon color="primary"/>
+                    </IconButton>
+                    </Tooltip>
                     </div>
                     <hr/>
                     <div className="profile-details">
@@ -100,7 +121,7 @@ class Profile extends Component {
                         {website && (
                             <Fragment>
                                <LinkIcon color="primary"/>
-                               <a hreaf={website} target="_blank" rel="noopener noreferrer">
+                               <a href={website} target="_blank" rel="noopener noreferrer">
                                     {' '}{website}
                                 </a> 
                                 <hr/>
@@ -135,9 +156,13 @@ const mapStateToProps = (state) => ({
     user: state.user
 });
 
+const mapActionsToProps = { logoutUser, uploadImage };
+
 Profile.propTypes = {
+    logoutUser: PropTypes.func.isRequired,
+    uploadImage: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     classes: PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(Profile))
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Profile))
