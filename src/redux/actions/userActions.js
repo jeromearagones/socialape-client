@@ -3,8 +3,8 @@ import axios from 'axios';
 
 export const loginUser = (userData, history) => (dispatch) => {
     dispatch({ type : LOADING_UI });
-    axios.
-        post('/login', userData)
+    axios
+        .post('/login', userData)
         .then((res) => {
             setAuthorizationHeader(res.data.token)
             dispatch(getUserData());
@@ -21,8 +21,8 @@ export const loginUser = (userData, history) => (dispatch) => {
 
 export const signupUser = (newUserData, history) => (dispatch) => {
     dispatch({ type : LOADING_UI });
-    axios.
-        post('/signup', newUserData)
+    axios
+        .getUripost('/signup', newUserData)
         .then((res) => {
             setAuthorizationHeader(res.data.token)
             dispatch(getUserData());
