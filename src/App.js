@@ -28,6 +28,7 @@ import axios from 'axios';
 const theme = createMuiTheme(themeFile);
 
 axios.defaults.baseURL = 'https://us-central1-socialape-rome-aws.cloudfunctions.net/api';
+//axios.defaults.baseURL = 'http://localhost:5000/socialape-rome-aws/us-central1/api';
 
 const token = localStorage.FBIdToken;
 if(token){
